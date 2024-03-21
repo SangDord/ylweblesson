@@ -2,7 +2,6 @@ import sys
 from io import BytesIO
 import requests
 from PIL import Image
-import param_tools
 
 
 toponym_to_find = " ".join(sys.argv[1:])
@@ -42,17 +41,33 @@ if not response:
 
 json_response = response.json()
 
-organization = json_response["features"][0]
-org_name = organization["properties"]["CompanyMetaData"]["name"]
-org_address = organization["properties"]["CompanyMetaData"]["address"]
-org_coordinates = organization["geometry"]["coordinates"]
+organizations = json_response["features"][:10]
 
-lls = [list(map(float, toponym_coodrinates.split())), org_coordinates]
+orgs_coordinates = []
+point_data = []
+for org in organizations:
+    orgs_coordinates += [org["geometry"]["coordinates"]]
+    if 'Hours' in org['properties']["CompanyMetaData"]:
+        if 'TwentyFourHours' in org['properties']["CompanyMetaData"]['Hours']['Availabilities'][0]:
+            point_data += ['pm2dgm']
+        elif 'Intervals' in org['properties']["CompanyMetaData"]['Hours']['Availabilities'][0]:
+            point_data += ['pm2blm']
+    else:
+        point_data += ['pm2grm']
+
+pt_params = ''
+for i in range(len(orgs_coordinates)):
+    if i != len(orgs_coordinates) - 1:
+        pt_params += ",".join([str(orgs_coordinates[i][0]), str(orgs_coordinates[i][1]), point_data[i]]) + '~'
+    else:
+        pt_params += ",".join([str(orgs_coordinates[i][0]), str(orgs_coordinates[i][1]), point_data[i]])
+
+if not pt_params:
+    print('Аптеки не найдены')
+    sys.exit(1)
+
 map_params = {
-    "ll": ",".join(map(str, param_tools.get_mid_ll(lls[0], lls[1]))),
-    "spn": ','.join(map(str, param_tools.get_spn_tp(lls[0], lls[1]))),
-    "pt": "{},{},{}~{},{},{}".format(toponym_lon, toponym_lat, 'round', 
-                                     org_coordinates[0], org_coordinates[1], 'pm2dgl'),
+    "pt": pt_params,
     "l": "map"
 }
 
@@ -66,16 +81,3 @@ if not response:
 
 Image.open(BytesIO(
     response.content)).show()
-
-distance = str(round(param_tools.lonlat_distance(map(float, toponym_coodrinates.split(" ")), org_coordinates), 2))
-
-snippet = {
-    'Расстояние':  distance + ' м',
-    'Адрес': org_address,
-    'Название': org_name,
-    'Режим работы': organization['properties']["CompanyMetaData"]['Hours']['text']
-}
-
-for k, v in snippet.items():
-    print(k, '-', v)
-
