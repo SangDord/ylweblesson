@@ -206,5 +206,39 @@ def astronaut_selection():
         return "<h1>Анкета отправлена!<h1>"
 
 
+@app.route('/choice/<planet_name>')
+def planet_choice(planet_name):
+    planets = {'Марс': ['Это планета близка к земле;',
+                        'На ней много необходимых ресурсов;',
+                        'На ней есть вода и атмосфера;',
+                        'На ней есть небольшое магнитное поле;',
+                        'Наконец, она просто красива!']} #  можно добавить при необходимости ровно 5 причин
+    alerts_color = ['alert-light', 'alert-success', 'alert-secondary','alert-warning', 'alert-danger']
+    if planet_name in planets.keys():
+        data = '\n'.join([f'<div class="alert {alerts_color[i]}" role="alert"><h3>{planets[planet_name][i]}</h3></div>'
+                          for i in range(len(planets[planet_name]) % 6)])
+        content = f'''
+            <!doctype html>
+            <html lang="en">
+                <head>
+                    <meta charset="utf-8">
+                    <title>Колонизация</title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                    <link rel="stylesheet"
+                    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+                    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+                    crossorigin="anonymous">
+                </head>
+                <body>
+                    <h1>Мое предложение: {planet_name}</h1>
+                    {data}
+                    </div>
+                </body>
+            </html>'''
+        return content
+    else:
+        return f'Данных о планете {planet_name} пока нет!'
+
+
 if __name__ == "__main__":
     app.run(port=8080, host='127.0.0.1')
