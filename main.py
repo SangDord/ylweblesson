@@ -92,7 +92,7 @@ def astronaut_selection():
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
             integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
             crossorigin="anonymous">
-            <link rel="stylesheet" type="text/css" href="{url_for('static', filename='css/style.css')}" />
+
             <title>Отбор астронавтов</title>
             </head>
             <body>
@@ -228,6 +228,7 @@ def planet_choice(planet_name):
                     href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
                     integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
                     crossorigin="anonymous">
+                    <link rel="stylesheet" type="text/css" href="{url_for('static', filename='css/style.css')}" />
                 </head>
                 <body>
                     <h1>Мое предложение: {planet_name}</h1>
@@ -269,5 +270,51 @@ def result_selection(nickname, level: int, rating: float):
     return content
 
 
+@app.route('/load_photo', methods=['POST', 'GET'])
+def load_photo():
+    def get_content(photo=''):
+        content = f'''
+            <!DOCTYPE html>
+            <html lang="en">
+                <head>
+                    <meta charset="utf-8">
+                    <title>Колонизация</title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                    <link rel="stylesheet"
+                    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+                    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+                    crossorigin="anonymous">
+                    <link rel="stylesheet" type="text/css" href="{url_for('static', filename='css/style.css')}" />
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>Загрузка фотографию</h1>
+                        <h3>для участия в миссии</h3>
+                    </div>
+                    <div>
+                        <form class="photo_form" method="post" enctype="multipart/form-data">
+                            <div class="form_group">
+                                <label for="photo">Приложите фотографию</label>
+                                <input type="file" class="form-control-file" id="photo" name="file">
+                            </div>
+                            {photo}
+                            <div class="btn-submit">
+                                <button type="submit" class="btn btn-primary">Отправить</button>
+                            </div>
+                        </form>
+                    </div>
+                </body>
+            </html>'''
+        return content
+    
+    if request.method == 'GET':
+        return get_content()
+    elif request.method == 'POST':
+        file = request.files['file']
+        with open('static/img/photo.jpg', 'wb') as file_out:
+            file_out.write(file.read())
+        return get_content(f"<img src='{url_for('static', filename='img/photo.jpg')}' width='500'>")
+        
+    
 if __name__ == "__main__":
     app.run(port=8080, host='127.0.0.1')
