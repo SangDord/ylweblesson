@@ -314,7 +314,64 @@ def load_photo():
         with open('static/img/photo.jpg', 'wb') as file_out:
             file_out.write(file.read())
         return get_content(f"<img src='{url_for('static', filename='img/photo.jpg')}' width='500'>")
-        
-    
+
+
+@app.route('/carousel')
+def carousel():
+    content = f'''
+        <!DOCTYPE html>
+        <html lang="en">
+            <head>
+                <meta charset="utf-8">
+                <title>Колонизация</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+                      rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+                      crossorigin="anonymous">
+                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+                        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+                        crossorigin="anonymous"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+                        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+                        crossorigin="anonymous"></script>
+                <link rel="stylesheet" type="text/css" href="{url_for('static', filename='css/style.css')}" />
+            </head>
+            <body>
+                <div class="header">
+                    <h1>Пейзажи Марса</h1>
+                </div>
+                <div class="container">
+                    <div id="carouselSlide" class="carousel slide">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselSlide" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselSlide" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselSlide" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            <button type="button" data-bs-target="#carouselSlide" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="{url_for('static', filename='img/mars-img1.jpg')}" class="d-block w-100" height="700">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{url_for('static', filename='img/mars-img2.jpg')}" class="d-block w-100" height="700"> 
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{url_for('static', filename='img/mars-img3.jpg')}" class="d-block w-100" height="700">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{url_for('static', filename='img/mars-img4.jpg')}" class="d-block w-100" height="700">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+                        crossorigin="anonymous"></script>
+            </body>
+        </html>
+    '''
+    return content
+
+
 if __name__ == "__main__":
     app.run(port=8080, host='127.0.0.1')
