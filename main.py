@@ -1,6 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
+from loginfrom import LoginForm
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'ylweblesson_secret_key'
 
 
 @app.route('/<title>')
@@ -50,6 +52,19 @@ def auto_answer():
         if not v and k != 'ready':
             params[k] = 'None'
     return render_template('auto_answer.html', **params)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        return redirect('/success')
+    return render_template('login.html', title='Аварийный доступ', form=form)
+
+
+@app.route('/success')
+def success():
+    return render_template('success.html')
 
 
 if __name__ == "__main__":
