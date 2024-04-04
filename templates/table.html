@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% if sex in ['male', 'female'] and is_adult != 'None' %}
+        <h2 class="table-header">Оформление каюты</h2>
+        <table class="border decoration-cabin-table">
+            <thead>
+                <tr>
+                    <th class="width-400px">Цвет стен</th>
+                    <th class="width-400px">Эмблема</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% if sex == 'male' and not is_adult %}
+                        <td class="bg-primary-subtle width-400px"></td>
+                    {% elif sex == 'male' and is_adult %}
+                        <td class="bg-primary width-400px"></td>
+                    {% elif not is_adult %}
+                        <td class="bg-danger-subtle width-400px"></td>
+                    {% else %}
+                        <td class="bg-danger width-400px"></td>
+                    {% endif %}
+                    {% if not is_adult %}
+                        <td class="width-400px"><img src="/static/img/marchild.jpg" width="400" height="500"></td>
+                    {% else %}
+                        <td class="width-400px"><img src="/static/img/maradult.jpg" width="400" height="500"></td>
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+    {% else %}
+        <h2 class="table-header">Некорректные данные</h2>
+    {% endif %}
+{% endblock %}

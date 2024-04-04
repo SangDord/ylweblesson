@@ -78,5 +78,16 @@ def distribution():
     return render_template('distribution.html', astr_list=astr_list)
 
 
+@app.route('/table/<sex>/<age>')
+def table(sex, age):
+    try:
+        is_adult = int(age) >= 21
+        if int(age) <= 0:
+            raise ValueError
+    except ValueError:
+        is_adult = 'None'
+    return render_template('table.html', sex=sex, is_adult=is_adult)
+
+
 if __name__ == "__main__":
     app.run(port=8080, host='127.0.0.1')
