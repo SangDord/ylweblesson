@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h2 class="distribution-header">Размещение по каютам</h2>
+    {% set pat = 'Каюта №' %}
+    {% for astr in astr_list %}
+        <p>{{ astr }} - {{ pat }} {{loop.index}} {% if loop.first %} - капитан корабля {% endif %}</p>
+    {% endfor %}
+{% endblock content %}
