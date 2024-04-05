@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="personal-info">
+        <h3> {{ name }} {{ surname }} </h3>
+        <figure>
+            <img class="member-photo" src="{{ photo }}" title="Фото участника" width="600" heigth="1000">
+            <figcaption>
+                {{ profs }}
+            </figcaption>
+        </figure>
+    </div>
+{% endblock content %}

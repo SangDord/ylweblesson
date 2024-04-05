@@ -9,3 +9,16 @@ form.form-slide {
 h1.galery-header {
     text-align: center;
 }
+
+
+div.personal-info {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 600px;
+}
+
+
+img.member-photo {
+    border-radius: 50px;
+}

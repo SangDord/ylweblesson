@@ -3,11 +3,14 @@ from loginform import LoginForm
 from galeryform import GaleryForm
 from werkzeug.utils import secure_filename
 import os
+import json
+from random import randint
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ylweblesson_secret_key'
 app.config['UPLOAD_FOLDER'] = 'static/img/galery/extra'
 app.config['GALERY_STORAGE'] = 'static/img/galery'
+app.config['PHOTOS_STORAGE'] = '/static/img/personal_photos'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 
@@ -116,6 +119,19 @@ def galery():
     all_pics = pics + extra_pics
     return render_template('galery.html', title='Красная планета', form=form, 
                            pics=pics, extra_pics=extra_pics, all_pics=all_pics)
+    
+    
+@app.route('/member')
+def member():
+    with open('templates/members.json') as file_in:
+        data = json.load(file_in)
+    mem_number = randint(1, len(data.keys()))
+    params = {}
+    params['name'] = data[f'mem{mem_number}']['Имя']
+    params['surname'] = data[f'mem{mem_number}']['Фамилия']
+    params['photo'] = os.path.join(app.config['PHOTOS_STORAGE'], data[f'mem{mem_number}']['Фото'])
+    params['profs'] = data[f'mem{mem_number}']['Специальности']
+    return render_template('member.html',**params)
     
     
 if __name__ == "__main__":
