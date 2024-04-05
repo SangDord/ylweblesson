@@ -1,8 +1,19 @@
-from flask import Flask, render_template, redirect
-from loginfrom import LoginForm
+from flask import Flask, render_template, redirect, flash
+from loginform import LoginForm
+from galeryform import GaleryForm
+from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ylweblesson_secret_key'
+app.config['UPLOAD_FOLDER'] = 'static/img/galery/extra'
+app.config['GALERY_STORAGE'] = 'static/img/galery'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 
 @app.route('/<title>')
@@ -89,5 +100,23 @@ def table(sex, age):
     return render_template('table.html', sex=sex, is_adult=is_adult)
 
 
+@app.route('/galery', methods=['GET', 'POST'])
+def galery():
+    form = GaleryForm()
+    pics = [i for i in os.listdir(app.config['GALERY_STORAGE']) if i != 'extra']
+    if form.validate_on_submit() and form.picture.data:
+        if allowed_file(form.picture.data.filename):
+            picname = secure_filename(form.picture.data.filename)
+            picpath = os.path.join(app.config['UPLOAD_FOLDER'], picname)
+            form.picture.data.save(picpath)
+        else:
+            print('flash')
+            flash('Extension not allowed.', 'error')
+    extra_pics = os.listdir(app.config['UPLOAD_FOLDER'])
+    all_pics = pics + extra_pics
+    return render_template('galery.html', title='Красная планета', form=form, 
+                           pics=pics, extra_pics=extra_pics, all_pics=all_pics)
+    
+    
 if __name__ == "__main__":
     app.run(port=8080, host='127.0.0.1')

@@ -1,7 +1,11 @@
-.decoration-cabin-table {
-    width: 800px;
+form.form-slide {
+    margin-left: auto;
+    margin-right: auto;
+    width: 600px;
+    border-radius: 10px;
 }
 
-.width-400px {
-    width: 400px;
+
+h1.galery-header {
+    text-align: center;
 }

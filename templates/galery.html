@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h1 class="galery-header">Пейзажи Марса</h1>
+    <div class="container">
+        <div id="carouselSlide" class="carousel slide">
+            <div class="carousel-indicators">
+                {% for pic in all_pics %}
+                    <button type="button"
+                            data-bs-target="#carouselSlide"
+                            data-bs-slide-to={{ loop.index0 }}
+                            aria-label="Slide {{ loop.index }}"
+                            {% if loop.first %} class="active" aria-current="true" {% endif %}></button>
+                {% endfor %}
+            </div>
+            <div class="carousel-inner">
+                {% for pic in pics %}
+                    <div {% if loop.first %} class="carousel-item active" {% else %} class="carousel-item" {% endif %}>
+                        <img src="/static/img/galery/{{pic}}" class="d-block w-100" height="700">
+                    </div>
+                {% endfor %}
+                {% for pic in extra_pics %}
+                    <div class="carousel-item">
+                        <img src="/static/img/galery/extra/{{pic}}" class="d-block w-100" height="700">
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <form class="form-slide border border-secondary-subtle" method="POST" enctype="multipart/form-data" novalidate>
+        {{ form.csrf_token }}
+        <p>
+            {{ form.picture.label }}<br>
+            {{ form.picture(class="form-control")}}<br>
+            {% for error in form.picture.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </p>
+        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    </form>
+
+{% endblock content %}
