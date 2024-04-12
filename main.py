@@ -17,7 +17,7 @@ def get_member(surname='', name='', age='', position='', speciality='', address=
     return member
 
 
-def get_job(team_leader=0, job='', work_size=0, collaborators='', start_date='', end_date='', is_finished=None):
+def get_job(team_leader=0, job='', work_size=0, collaborators='', start_date='', is_finished=None):
     job_ob = Jobs()
     job_ob.team_leader = team_leader
     job_ob.job = job
@@ -28,11 +28,7 @@ def get_job(team_leader=0, job='', work_size=0, collaborators='', start_date='',
             job_ob.start_date = datetime.datetime.now()
         else:
             job_ob.start_date = datetime.datetime(**start_date)
-    if end_date:
-        if end_date == 'now':
-            job_ob.start_date = datetime.datetime.now()
-        else:
-            job_ob.start_date = datetime.datetime(**end_date)
+        job_ob.end_date = job_ob.start_date + datetime.timedelta(hours=work_size)
     job_ob.is_finished = is_finished
     return job_ob
 
