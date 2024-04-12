@@ -10,31 +10,40 @@
             "email": "scott_chief@mars.org"
         },
         "Member1": {
+            "surname": "Wair",
+            "name": "Andy",
+            "age": 25,
+            "position": "colonist",
+            "speciality": "terraforming engineer",
+            "address": "module_3",
+            "email": "wair_andy@mars.org"
+        },
+        "Member2": {
+            "surname": "Sanders",
+            "name": "Teddy",
+            "age": 23,
+            "position": "colonist",
+            "speciality": "cyber-engineer",
+            "address": "module_3",
+            "email": "cyber_teddy@mars.org"
+        },
+        "Member3": {
             "surname": "Scitle",
             "name": "Adam",
-            "age": 25,
+            "age": 22,
             "position": "colonist",
             "speciality": "pilot",
             "address": "module_2",
             "email": "adam_scitle@mars.org"
         },
-        "Member2": {
-            "surname": "Iner",
-            "name": "Oman",
-            "age": 23,
+        "Member4": {
+            "surname": "Hosko",
+            "name": "Petr",
+            "age": 27,
             "position": "colonist",
-            "speciality": "cyber-engineer",
-            "address": "module_3",
-            "email": "cyber_oman@mars.org"
-        },
-        "Member3": {
-            "surname": "Kastrov",
-            "name": "Gregory",
-            "age": 22,
-            "position": "colonist",
-            "speciality": "medic",
+            "speciality": "meteorologist",
             "address": "module_4",
-            "email": "kastrov_doc@mars.org"
+            "email": "petrovich_ho@mars.org"
         }
     }
 }

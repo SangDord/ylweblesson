@@ -1,8 +1,13 @@
+from flask import Flask, render_template
 from data import db_session
 from data.users import User
 from data.jobs import Jobs
 import datetime
 import json
+import os
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'ylweblesson_secret_key'
 
 
 def get_member(surname='', name='', age='', position='', speciality='', address='', email=''):
@@ -59,5 +64,30 @@ def solution2():
     session.close()
 
 
+def solution3():
+    if 'mars_mission.sqlite' in os.listdir('db'):
+        os.remove('db/mars_mission.sqlite')
+    db_session.global_init('db/mars_mission.sqlite')
+    session = db_session.create_session()
+    with open('templates/members.json') as json_file:
+        members = json.load(json_file)
+    for member_data in members["Members"].values():
+        session.add(get_member(**member_data))
+    with open('templates/jobs.json') as json_file:
+        jobs = json.load(json_file)
+    for job in jobs['Jobs'].values():
+        session.add(get_job(**job))
+    session.commit()
+    session.close()
+    app.run(port=8080, host='127.0.0.1')
+    
+    
+@app.route('/')
+def works_log():
+    session = db_session.create_session()
+    jobs = session.query(Jobs).all()
+    return render_template('works_log.html', jobs=jobs)
+
+
 if __name__ == "__main__":
-    solution2()
+    solution3()
