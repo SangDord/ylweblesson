@@ -1,0 +1,12 @@
+{
+    "Jobs": {
+        "job1": {
+            "team_leader": 1,
+            "job": "deployment of residential modules 1 and 2",
+            "work_size": 15,
+            "collaborators": "1, 2",
+            "start_date": "now",
+            "is_finished": false
+        }
+    }
+}
