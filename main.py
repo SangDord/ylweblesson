@@ -1,7 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from data import db_session
 from data.users import User
 from data.jobs import Jobs
+from forms.registerform import RegisterForm
 import datetime
 import json
 import os
@@ -80,8 +81,13 @@ def solution3():
     session.commit()
     session.close()
     app.run(port=8080, host='127.0.0.1')
-    
-    
+
+
+def solution4():
+    db_session.global_init('db/mars_mission.sqlite')
+    app.run(port=8080, host='127.0.0.1')
+
+
 @app.route('/')
 def works_log():
     session = db_session.create_session()
@@ -89,5 +95,39 @@ def works_log():
     return render_template('works_log.html', jobs=jobs)
 
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        if form.password.data != form.password_again.data:
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Пароли не совпадают")
+        session = db_session.create_session()
+        if session.query(User).filter(User.email == form.email.data).first():
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Такой пользователь уже есть")
+        user = User(
+            surname=form.surname.data,
+            name=form.name.data,
+            email=form.email.data,
+            speciality=form.speciality.data,
+            position=form.position.data,
+            address=form.address.data,
+            age=form.age.data
+        )
+        user.set_password(form.password.data)
+        session.add(user)
+        session.commit()
+        return redirect('/success')
+    return render_template('register.html', title='Регистрация', form=form)
+
+
+@app.route('/success', methods=['GET', 'POST'])
+def success():
+    return "<h2> You've successfully registered </h2>"
+
+
 if __name__ == "__main__":
-    solution3()
+    solution4()
