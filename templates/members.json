@@ -1,20 +1,40 @@
 {
-    "mem1": {
-        "Имя": "Энди",
-        "Фамилия": "Уир",
-        "Фото": "pp1.jpg",
-        "Специальности": "астрогеолог, специалист по радиационной защите"
-    },
-    "mem2": {
-        "Имя": "Роман",
-        "Фамилия": "Абакумов",
-        "Фото": "pp2.jpg",
-        "Специальности": "киберинженер, строитель, инженер-исследователь"
-    },
-    "mem3": {
-        "Имя": "Егор",
-        "Фамилия": "Арбузов",
-        "Фото": "pp3.jpg",
-        "Специальности": "пилот, строитель"
+    "Members": {
+        "Captain": {
+            "surname": "Scott",
+            "name": "Ridley",
+            "age": 21,
+            "position": "captain",
+            "speciality": "research engineer",
+            "address": "module_1",
+            "email": "scott_chief@mars.org"
+        },
+        "Member1": {
+            "surname": "Scitle",
+            "name": "Adam",
+            "age": 25,
+            "position": "colonist",
+            "speciality": "pilot",
+            "address": "module_2",
+            "email": "adam_scitle@mars.org"
+        },
+        "Member2": {
+            "surname": "Iner",
+            "name": "Oman",
+            "age": 23,
+            "position": "colonist",
+            "speciality": "cyber-engineer",
+            "address": "module_3",
+            "email": "cyber_oman@mars.org"
+        },
+        "Member3": {
+            "surname": "Kastrov",
+            "name": "Gregory",
+            "age": 22,
+            "position": "colonist",
+            "speciality": "medic",
+            "address": "module_4",
+            "email": "kastrov_doc@mars.org"
+        }
     }
 }
