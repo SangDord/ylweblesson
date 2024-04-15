@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, abort
 from data import db_session
 from data.users import User
 from data.jobs import Jobs
@@ -139,7 +139,20 @@ def edit_job(id):
         db_sess.commit()
         return redirect('/')
     return render_template('addjob.html', title='Editing a job', form=form)
-    
+
+
+@app.route('/deletejob/<int:id>', methods=['GET', 'POST'])
+@login_required
+def deletejob(id):
+    db_sess = db_session.create_session()
+    job = db_sess.query(Jobs).filter(Jobs.id == id)
+    if job.team_leader == current_user.id or current_user == 1:
+        db_sess.delete(job)
+        db_sess.commit()
+    else:
+        abort(404)
+    return redirect('/')
+
 
 if __name__ == "__main__":
     db_session.global_init('db/mars_mission.sqlite')
