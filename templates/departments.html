@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h1 class="align-middle"> List of Departments </h1>
+    <p>
+        <a class="btn btn-outline-secondary" href="/"> Back to Jobs </a>
+        {% if current_user.is_authenticated %}
+            <a class="btn btn-outline-secondary" href="/departments/adddepartment"> Add a Departments </a>
+        {% endif %}
+    </p>
+    {% for item in departments %}
+        <div class="department-block">
+            <h2> Department # {{ item.id }}</h2>
+            <table>
+                <thead>
+                    <tr class="bg-secondary-subtle" style="height:30px;">
+                        <th style="width:400px;"> Title of department </th>
+                        <th style="width:200px;"> Chief </th>
+                        <th style="width:200px;" class="align-middle"> Members </th>
+                        <th style="width:300px;" class="align-middle"> Department Email </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="height:50px;" class="bg-primary-subtle">
+                        <td> {{ item.title }} </td>
+                        <td> {{ item.chief_user.surname }} {{ item.chief_user.name }} </td>
+                        <td class="align-middle"> {{ item.members }} </td>
+                        <td class="align-middle"> {{ item.email }} </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% if current_user.id == item.chief_user.id or current_user.id == 1 %}
+                <p>
+                    <a class="btn btn-outline-warning" href="/departments/editdepartment/{{ item.id }}"> Edit department </a>
+                    <a class="btn btn-outline-danger" href="/departments/deletedepartment/{{ item.id }}"> Delete department </a>
+                </p>
+            {% endif %}
+        </div> <br>
+    {% endfor %}
+{% endblock content %}

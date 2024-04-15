@@ -14,7 +14,7 @@
             "surname": "Wair",
             "name": "Andy",
             "age": 25,
-            "position": "colonist",
+            "position": "middle",
             "speciality": "terraforming engineer",
             "address": "module_3",
             "email": "wair_andy@mars.org",
@@ -24,7 +24,7 @@
             "surname": "Sanders",
             "name": "Teddy",
             "age": 23,
-            "position": "colonist",
+            "position": "middle",
             "speciality": "cyber-engineer",
             "address": "module_3",
             "email": "cyber_teddy@mars.org",
@@ -34,7 +34,7 @@
             "surname": "Scitle",
             "name": "Adam",
             "age": 22,
-            "position": "colonist",
+            "position": "middle",
             "speciality": "pilot",
             "address": "module_2",
             "email": "adam_scitle@mars.org",
@@ -44,11 +44,21 @@
             "surname": "Hosko",
             "name": "Petr",
             "age": 27,
-            "position": "colonist",
+            "position": "middle",
             "speciality": "meteorologist",
             "address": "module_4",
             "email": "petrovich_ho@mars.org",
             "password": "mem4hoskopass"
+        },
+        "Member5": {
+            "surname": "Watny",
+            "name": "Mark",
+            "age": 25,
+            "position": "middle",
+            "speciality": "medic",
+            "address": "module_3",
+            "email": "watnyqq@mars.org",
+            "password": "mem5watnypass"
         }
     }
 }

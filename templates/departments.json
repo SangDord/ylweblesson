@@ -1,0 +1,22 @@
+{
+    "Departments": {
+        "dep1": {
+            "title": "Department of geological exploration",
+            "chief": 2,
+            "members": "3, 4, 5",
+            "email": "geo@mars.org"
+        },
+        "dep2": {
+            "title": "Department of biological research",
+            "chief": 5,
+            "members": "2, 3",
+            "email": "bio@mars.org"
+        },
+        "dep3": {
+            "title": "Department of terraforming",
+            "chief": 1,
+            "members": "4, 5",
+            "email": "terra@mars.org"
+        }
+    }
+}

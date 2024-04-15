@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, abort
 from data import db_session
 from data.users import User
 from data.jobs import Jobs
+from data.departement import Department
 from forms.__all_forms import *
 import os
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -22,8 +23,8 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-    session = db_session.create_session()
-    jobs = session.query(Jobs).all()
+    db_sess = db_session.create_session()
+    jobs = db_sess.query(Jobs).all()
     return render_template('index.html', jobs=jobs)
 
 
@@ -117,20 +118,25 @@ def edit_job(id):
         job: Jobs = db_sess.query(Jobs).filter(Jobs.id == int(id)).first()
         if not (job.team_leader == current_user.id or current_user.id == 1):
             return render_template('addjob.html', title='Editing a job', form=form, message='Access denied')
+        
         if not db_sess.query(User).filter(User.id == form.team_leader.data).first():
             return render_template('addjob.html', title='Editing a job',
                                    form=form, message='Team leader does not exist')
+            
         try:
             if not all(isinstance(user_id, int) for user_id in map(int, form.collaborators.data.split(', '))):
                 return render_template('addjob.html', title='Editing a job',
-                                    form=form, message='Collaborators\'s field is incorrectly filled')
+                                       form=form, message='Collaborators\'s field is incorrectly filled')
+                
+            if not all([not db_sess.query(User).filter(User.id == int(user_id)).first() is None
+                    for user_id in form.collaborators.data.split(', ')]):
+                return render_template('addjob.html', title='Editing a job',
+                                       form=form, message='Collaborators are incorrectly listed')
+                
         except ValueError:
             return render_template('addjob.html', title='Editing a job',
                                     form=form, message='Collaborators\'s field is incorrectly filled')
-        if not all([not db_sess.query(User).filter(User.id == int(user_id)).first() is None
-                    for user_id in form.collaborators.data.split(', ')]):
-            return render_template('addjob.html', title='Editing a job', 
-                                   form=form, message='Collaborators are incorrectly listed')
+
         job.job = form.job.data
         job.team_leader = form.team_leader.data
         job.work_size = form.work_size.data
@@ -145,7 +151,7 @@ def edit_job(id):
 @login_required
 def deletejob(id):
     db_sess = db_session.create_session()
-    job = db_sess.query(Jobs).filter(Jobs.id == id).first()
+    job: Jobs = db_sess.query(Jobs).filter(Jobs.id == id).first()
     if job.team_leader == current_user.id or current_user.id == 1:
         db_sess.delete(job)
         db_sess.commit()
@@ -154,6 +160,99 @@ def deletejob(id):
     return redirect('/')
 
 
+@app.route('/departments')
+def departments():
+    db_sess = db_session.create_session()
+    departments = db_sess.query(Department).all()
+    return render_template('departments.html', departments=departments)
+
+
+@app.route('/departments/adddepartment', methods=['GET', 'POST'])
+@login_required
+def adddepartments():
+    form = AdddepartmentForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if not db_sess.query(User).filter(User.id == form.chief.data).first():
+            return render_template('adddepartment.html', title='Adding a department',
+                                   form=form, message='Chief does not exist')
+            
+        try:
+            if not all(isinstance(user_id, int) for user_id in map(int, form.members.data.split(', '))):
+                return render_template('adddepartment.html', title='Adding a department',
+                                    form=form, message='Members\'s field is incorrectly filled')
+                
+            if not all([not db_sess.query(User).filter(User.id == int(user_id)).first() is None
+                        for user_id in form.members.data.split(', ')]):
+                return render_template('adddepartment.html', title='Adding a department', 
+                                    form=form, message='Members are incorrectly listed')
+                
+        except ValueError:
+            return render_template('adddepartment.html', title='Adding a department',
+                                    form=form, message='Members\'s field is incorrectly filled')
+            
+        new_department = Department()
+        new_department.title = form.title.data
+        new_department.chief = form.chief.data
+        new_department.members = form.members.data
+        new_department.email = form.email.data
+        db_sess.add(new_department)
+        db_sess.commit()
+        return redirect('/departments')
+    return render_template('adddepartment.html', title='Adding a department', form=form)
+        
+
+@app.route('/departments/editdepartment/<int:id>', methods=['GET', 'POST'])
+@login_required
+def editdepartment(id):
+    form = AdddepartmentForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        department: Department = db_sess.query(Department).filter(Department.id == id).first()
+        if not (department.chief == current_user.id or current_user.id == 1):
+            return render_template('adddepartment.html', title='Editing a department',
+                                   form=form, message='Access denied')
+            
+        if not db_sess.query(User).filter(User.id == form.chief.data).first():
+            return render_template('adddepartment.html', title='Editing a department',
+                                   form=form, message='Chief does not exist')
+        
+        try:
+            if not all(isinstance(user_id, int) for user_id in map(int, form.members.data.split(', '))):
+                return render_template('adddepartment.html', title='Editing a department',
+                                    form=form, message='Members\'s field is incorrectly filled')
+                
+            if not all([not db_sess.query(User).filter(User.id == int(user_id)).first() is None
+                        for user_id in form.members.data.split(', ')]):
+                return render_template('adddepartment.html', title='Editing a department', 
+                                    form=form, message='Members are incorrectly listed')
+                
+        except ValueError:
+            return render_template('adddepartment.html', title='Editing a department',
+                                    form=form, message='Members\'s field is incorrectly filled')
+        
+        department.title = form.title.data
+        department.chief = form.chief.data
+        department.members = form.members.data
+        department.email = form.email.data
+        db_sess.commit()
+        return redirect('/departments')
+    return render_template('adddepartment.html', title='Editing a department', form=form)
+        
+    
+@app.route('/departments/deletedepartment/<int:id>')
+@login_required
+def deletedepartment(id):
+    db_sess = db_session.create_session()
+    department: Department = db_sess.query(Department).filter(Department.id == id).first()
+    if department.chief == current_user.id or current_user.id == 1:
+        db_sess.delete(department)
+        db_sess.commit()
+    else:
+        abort(404)
+    return redirect('/departments')
+        
+        
 if __name__ == "__main__":
     db_session.global_init('db/mars_mission.sqlite')
     app.run(port=8080, host='127.0.0.1')
