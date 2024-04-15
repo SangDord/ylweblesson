@@ -3,8 +3,6 @@ from data import db_session
 from data.users import User
 from data.jobs import Jobs
 from forms.__all_forms import *
-import datetime
-import json
 import os
 from flask_login import LoginManager, login_user, logout_user, login_required
 
@@ -34,12 +32,12 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
-            return render_template('register.html', title='Регистрация',
+            return render_template('register.html', title='Registration',
                                    form=form,
                                    message="Пароли не совпадают")
         session = db_session.create_session()
         if session.query(User).filter(User.email == form.email.data).first():
-            return render_template('register.html', title='Регистрация',
+            return render_template('register.html', title='Registration',
                                    form=form,
                                    message="Такой пользователь уже есть")
         user = User(
@@ -77,6 +75,34 @@ def logout():
     logout_user()
     return redirect('/')
 
+
+@app.route('/addjob', methods=['GET', 'POST'])
+@login_required
+def addjob():
+    form = AddjobForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if not db_sess.query(User).filter(User.id == form.team_leader.data).first():
+            return render_template('addjob.html', title='Adding a job',
+                                   form=form, message='Team leader does not exist')
+        if not all(isinstance(user_id, int) for user_id in form.collaborators.data.split(', ')):
+            return render_template('addjob.html', title='Adding a job',
+                                   form=form, message='Collaborators\'s field is incorrectly filled')
+        if not all([not db_sess.query(User).filter(User.id == int(user_id)).first() is None
+                    for user_id in form.collaborators.data.split(', ')]):
+            return render_template('addjob.html', title='Adding a job', 
+                                   form=form, message='Collaborators are incorrectly listed')
+        new_job = Jobs()
+        new_job.job = form.job.data
+        new_job.team_leader = form.team_leader.data
+        new_job.work_size = form.work_size.data
+        new_job.collaborators = form.collaborators.data
+        new_job.is_finished = form.is_finished.data
+        db_sess.add(new_job)
+        db_sess.commit()
+        return redirect('/')
+    return render_template('addjob.html', title='Adding a job', form=form)
+        
   
 if __name__ == "__main__":
     db_session.global_init('db/mars_mission.sqlite')
