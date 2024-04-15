@@ -3,7 +3,7 @@ from wtforms.validators import DataRequired
 from flask_wtf import FlaskForm
 
 
-class AddjobFrom(FlaskForm):
+class AddjobForm(FlaskForm):
     job = StringField('Job Title', validators=[DataRequired()])
     team_leader = IntegerField('Team Leader (id)', validators=[DataRequired()])
     work_size = IntegerField('Work Size (hours)', validators=[DataRequired()])
