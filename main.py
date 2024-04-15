@@ -6,7 +6,7 @@ from forms.__all_forms import *
 import datetime
 import json
 import os
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, logout_user, login_required
 
 
 app = Flask(__name__)
@@ -146,7 +146,15 @@ def login():
             return redirect('/')
         return render_template('login.html', form=form, message='Неправильный логин или пароль')
     return render_template('login.html', title='Авторизация', form=form)
-    
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/')
+
 
 if __name__ == "__main__":
-    solution4()
+    db_session.global_init('db/mars_mission.sqlite')
+    app.run(port=8080, host='127.0.0.1')
