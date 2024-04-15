@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect
 from data import db_session
 from data.users import User
 from data.jobs import Jobs
-from forms.registerform import RegisterForm
+from forms.__all_forms import *
 import datetime
 import json
 import os
