@@ -7,7 +7,8 @@
             "position": "captain",
             "speciality": "research engineer",
             "address": "module_1",
-            "email": "scott_chief@mars.org"
+            "email": "scott_chief@mars.org",
+            "password": "capmasterpassword"
         },
         "Member1": {
             "surname": "Wair",
@@ -16,7 +17,8 @@
             "position": "colonist",
             "speciality": "terraforming engineer",
             "address": "module_3",
-            "email": "wair_andy@mars.org"
+            "email": "wair_andy@mars.org",
+            "password": "mem1wairpass"
         },
         "Member2": {
             "surname": "Sanders",
@@ -25,7 +27,8 @@
             "position": "colonist",
             "speciality": "cyber-engineer",
             "address": "module_3",
-            "email": "cyber_teddy@mars.org"
+            "email": "cyber_teddy@mars.org",
+            "password": "mem2sanderspass"
         },
         "Member3": {
             "surname": "Scitle",
@@ -34,7 +37,8 @@
             "position": "colonist",
             "speciality": "pilot",
             "address": "module_2",
-            "email": "adam_scitle@mars.org"
+            "email": "adam_scitle@mars.org",
+            "password": "mem3scitlepass"
         },
         "Member4": {
             "surname": "Hosko",
@@ -43,7 +47,8 @@
             "position": "colonist",
             "speciality": "meteorologist",
             "address": "module_4",
-            "email": "petrovich_ho@mars.org"
+            "email": "petrovich_ho@mars.org",
+            "password": "mem4hoskopass"
         }
     }
 }

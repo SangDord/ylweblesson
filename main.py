@@ -115,7 +115,7 @@ def edit_job(id):
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         job: Jobs = db_sess.query(Jobs).filter(Jobs.id == int(id)).first()
-        if not (job.team_leader == current_user.id or current_user == 1):
+        if not (job.team_leader == current_user.id or current_user.id == 1):
             return render_template('addjob.html', title='Editing a job', form=form, message='Access denied')
         if not db_sess.query(User).filter(User.id == form.team_leader.data).first():
             return render_template('addjob.html', title='Editing a job',
@@ -146,7 +146,7 @@ def edit_job(id):
 def deletejob(id):
     db_sess = db_session.create_session()
     job = db_sess.query(Jobs).filter(Jobs.id == id).first()
-    if job.team_leader == current_user.id or current_user == 1:
+    if job.team_leader == current_user.id or current_user.id == 1:
         db_sess.delete(job)
         db_sess.commit()
     else:
