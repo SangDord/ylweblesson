@@ -6,7 +6,7 @@ from forms.__all_forms import *
 import datetime
 import json
 import os
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user
 
 
 app = Flask(__name__)
@@ -131,14 +131,22 @@ def register():
         user.set_password(form.password.data)
         session.add(user)
         session.commit()
-        return redirect('/success')
+        return redirect('/login')
     return render_template('register.html', title='Регистрация', form=form)
 
 
-@app.route('/success', methods=['GET', 'POST'])
-def success():
-    return "<h2> You've successfully registered </h2>"
-
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginFrom()
+    if form.validate_on_submit():    
+        db_sess = db_session.create_session()
+        user: User = db_sess.query(User).filter(User.email == form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect('/')
+        return render_template('login.html', form=form, message='Неправильный логин или пароль')
+    return render_template('login.html', title='Авторизация', form=form)
+    
 
 if __name__ == "__main__":
     solution4()

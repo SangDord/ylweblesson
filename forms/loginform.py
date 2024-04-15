@@ -6,5 +6,5 @@ from flask_wtf import FlaskForm
 class LoginFrom(FlaskForm):
     email = EmailField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    remember_be = BooleanField('Remember me', validators=[DataRequired()])
+    remember_me = BooleanField('Remember me')
     submit = SubmitField('Log in')
