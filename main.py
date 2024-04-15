@@ -145,7 +145,7 @@ def edit_job(id):
 @login_required
 def deletejob(id):
     db_sess = db_session.create_session()
-    job = db_sess.query(Jobs).filter(Jobs.id == id)
+    job = db_sess.query(Jobs).filter(Jobs.id == id).first()
     if job.team_leader == current_user.id or current_user == 1:
         db_sess.delete(job)
         db_sess.commit()

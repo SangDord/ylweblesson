@@ -29,6 +29,12 @@
                     </tr>
                 </tbody>
             </table>
+            {% if item.user.id == current_user.id or current_user.id == 1 %}
+                <p>
+                    <a class="btn btn-outline-warning" href="/editjob/{{ item.id }}"> Edit job </a>
+                    <a class="btn btn-outline-danger" href="/deletejob/{{ item.id }}"> Delete job </a>
+                </p>
+            {% endif %}
         </div> <br>
     {% endfor %}
 {% endblock content %}
