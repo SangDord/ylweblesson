@@ -2,6 +2,7 @@ from data import db_session
 import os, json
 from data.users import User
 from data.jobs import Jobs
+from data.categories import Category, Association
 from data.departement import Department
 import datetime
 
@@ -44,6 +45,19 @@ def get_department(title='', chief=0, members='', email=''):
     return department
 
 
+def get_category(name=''):
+    category = Category()
+    category.name = name
+    return category
+
+
+def get_asso(job=0, category=0):
+    asso = Association()
+    asso.job = job
+    asso.category = category
+    return asso
+    
+    
 if __name__ == '__main__':
     if 'mars_mission.sqlite' in os.listdir('db'):
         os.remove('db/mars_mission.sqlite')
@@ -53,13 +67,26 @@ if __name__ == '__main__':
         members = json.load(json_file)
     for member_data in members["Members"].values():
         session.add(get_member(**member_data))
+    
+    with open('templates/categories.json') as json_file:
+        categories = json.load(json_file)
+    for category in categories['Categories'].values():
+        session.add(get_category(**category))
+        
     with open('templates/jobs.json') as json_file:
         jobs = json.load(json_file)
     for job in jobs['Jobs'].values():
         session.add(get_job(**job))
+        
+    with open('templates/associations.json') as json_file:
+        assos = json.load(json_file)
+    for asso in assos['Associations'].values():
+        session.add(get_asso(**asso))
+        
     with open('templates/departments.json') as json_file:
         departs = json.load(json_file)
     for depart in departs['Departments'].values():
         session.add(get_department(**depart))
+        
     session.commit()
     session.close()

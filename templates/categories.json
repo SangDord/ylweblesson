@@ -1,0 +1,13 @@
+{
+    "Categories": {
+        "cat1": {
+            "name": "Job will not cause difficulties"
+        },
+        "cat2": {
+            "name": "There is a possibility of difficulties"
+        },
+        "cat3": {
+            "name": "Job will cause difficulties"
+        }
+    }
+}

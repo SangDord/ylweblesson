@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, abort
 from data import db_session
 from data.users import User
 from data.jobs import Jobs
+from data.categories import Category, Association
 from data.departement import Department
 from forms.__all_forms import *
 import os
@@ -90,18 +91,26 @@ def addjob():
             if not all(isinstance(user_id, int) for user_id in map(int, form.collaborators.data.split(', '))):
                 return render_template('addjob.html', title='Adding a job',
                                     form=form, message='Collaborators\'s field is incorrectly filled')
+                
+            if not all([not db_sess.query(User).filter(User.id == int(user_id)).first() is None
+                        for user_id in form.collaborators.data.split(', ')]):
+                return render_template('addjob.html', title='Adding a job', 
+                                    form=form, message='Collaborators are incorrectly listed')
+                
         except ValueError:
             return render_template('addjob.html', title='Adding a job',
                                     form=form, message='Collaborators\'s field is incorrectly filled')
-        if not all([not db_sess.query(User).filter(User.id == int(user_id)).first() is None
-                    for user_id in form.collaborators.data.split(', ')]):
-            return render_template('addjob.html', title='Adding a job', 
-                                   form=form, message='Collaborators are incorrectly listed')
+
+        category = db_sess.query(Category).filter(Category.id == form.category.data).first()
+        if not category:
+            return render_template('addjob.html', title='Adding a job',
+                                   form=form, message='Category does not exist')
         new_job = Jobs()
         new_job.job = form.job.data
         new_job.team_leader = form.team_leader.data
         new_job.work_size = form.work_size.data
         new_job.collaborators = form.collaborators.data
+        new_job.categories.append(category)
         new_job.is_finished = form.is_finished.data
         db_sess.add(new_job)
         db_sess.commit()
@@ -136,11 +145,18 @@ def edit_job(id):
         except ValueError:
             return render_template('addjob.html', title='Editing a job',
                                     form=form, message='Collaborators\'s field is incorrectly filled')
-
+            
+        category = db_sess.query(Category).filter(Category.id == form.category.data).first()
+        if not category:
+            return render_template('addjob.html', title='Adding a job',
+                                   form=form, message='Category does not exist')
         job.job = form.job.data
         job.team_leader = form.team_leader.data
         job.work_size = form.work_size.data
         job.collaborators = form.collaborators.data
+        prev_category_id = db_sess.query(Association).filter(Association.job == job.id).first().category
+        job.categories.remove(db_sess.query(Category).filter(Category.id == prev_category_id).first())
+        job.categories.append(category)
         job.is_finished = form.is_finished.data
         db_sess.commit()
         return redirect('/')

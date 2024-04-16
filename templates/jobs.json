@@ -23,6 +23,14 @@
             "collaborators": "5",
             "start_date": "now",
             "is_finished": false
+        },
+        "job4": {
+            "team_leader": 4,
+            "job": "Analysis of atmospheric air samples",
+            "work_size": 15,
+            "collaborators": "4, 5",
+            "start_date": "now",
+            "is_finished": true
         }
     }
 }

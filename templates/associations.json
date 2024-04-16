@@ -1,0 +1,20 @@
+{
+    "Associations": {
+        "asso1": {
+            "job": 1,
+            "category": 3
+        },
+        "asso2": {
+            "job": 2,
+            "category": 1
+        },
+        "asso3": {
+            "job": 3,
+            "category": 3
+        },
+        "asso4": {
+            "job": 4,
+            "category": 2
+        }
+    }
+}
