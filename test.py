@@ -1,4 +1,4 @@
-from requests import get, post, delete
+from requests import get, post, delete, put
 from pprint import pprint
 
 
@@ -14,11 +14,17 @@ print()
 print('Проверим')
 pprint(get('http://localhost:8080/api/jobs').json())
 print()
-print('Ошибочный запрос с несущеcтвующим id=999')
-pprint(delete(f'http://localhost:8080/api/jobs/999').json())
+print('Изменим добавленную работу')
+print(put(f'http://localhost:8080/api/jobs/{resp["id"]}',
+          json={'team_leader': 3,
+                'job': 'Edited test job',
+                'work_size': 30,
+                'collaborators': '2, 4',
+                'is_finished': True,
+                'category': 3}).json())
 print()
-print('Ошибочный запрос с несущеcтвующим id="deleteit"')
-pprint(delete(f'http://localhost:8080/api/jobs/deleteit').json())
+print('Проверим')
+pprint(get('http://localhost:8080/api/jobs').json())
 print()
 print('Корректно удалим добавленную работу')
 pprint(delete(f'http://localhost:8080/api/jobs/{resp["id"]}').json())
