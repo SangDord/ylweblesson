@@ -1,15 +1,15 @@
-from requests import get
+from requests import get, post
 from pprint import pprint
 
 
-print('Получение всех работ')
-pprint(get('http://localhost:8080/api/jobs').json())
+pprint(post('http://localhost:8080/api/jobs', json={}).json())
 print()
-print('Корректное получение одной работы (id=1)')
-pprint(get('http://localhost:8080/api/jobs/1').json())
+pprint(post('http://localhost:8080/api/jobs', json={'team_leader': 1}).json())
 print()
-print('Ошибочный запрос на получение одной работы (id=99)')
-pprint(get('http://localhost:8080/api/jobs/99').json())
-print()
-print('Ошибочный запрос на получение одной работы (id="stroka")')
-pprint(get('http://localhost:8080/api/jobs/stroka').json())
+pprint(post('http://localhost:8080/api/jobs',
+            json={'team_leader': 2,
+                  'job': 'test_job',
+                  'work_size': 40,
+                  'collaborators': '3, 4',
+                  'is_finished': False,
+                  'category': 2}).json())
