@@ -2,66 +2,56 @@ from requests import get, post, delete, put
 from pprint import pprint
 
 
-print('Добавим job')
-pprint(resp := post('http://localhost:8080/api/jobs',
-            json={'team_leader': 2,
-                  'job': 'test_job',
-                  'work_size': 40,
-                  'collaborators': '3, 4',
-                  'is_finished': False,
-                  'category': 2}).json())
+print('Пустой запрос на добавление юзера')
+pprint(post('http://localhost:8080/api/users', json={}).json())
 print()
-print('Проверим')
-pprint(get('http://localhost:8080/api/jobs').json())
+print('Ошибочный запрос на добавление юзера с неполным набором json-параметра')
+pprint(post('http://localhost:8080/api/users',
+            json={'surname': 'testsurname',
+                  'name': 'testname',
+                  'position': 'middle_test',
+                  'email': 'test99@mars.org',
+                  'password': 'testpass99'}).json())
 print()
-print('Пустой запрос')
-print(put(f'http://localhost:8080/api/jobs/{resp["id"]}', json={}).json())
+print('Корректное добавление юзера')
+pprint(resp := post('http://localhost:8080/api/users',
+            json={'surname': 'testsurname',
+                  'name': 'testname',
+                  'position': 'middle_test',
+                  'speciality': 'test-engineer',
+                  'age': 99,
+                  'address': 'module_test',
+                  'email': 'test99@mars.org',
+                  'password': 'testpass99'}).json())
 print()
-print('Oшибочный запрос с некорректным id=999 и неполными параметрами')
-print(put('http://localhost:8080/api/jobs/999',
-          json={'team_leader': 2}).json())
+print('Проверка')
+pprint(get('http://localhost:8080/api/users').json())
 print()
-print('Ошибочный запрос с некорректным id="q"')
-print(put('http://localhost:8080/api/jobs/q',
-          json={'team_leader': 3,
-                'job': 'Edited test job',
-                'work_size': 30,
-                'collaborators': '2, 4',
-                'is_finished': True,
-                'category': 3}).json())
+print('Пустой запрос на изменение юзера')
+pprint(put(f'http://localhost:8080/api/users/{resp["id"]}', json={}).json())
 print()
-print('Ошибочный запрос со связкой с несуществующими существами (не существует тимлида, категории, коллабораторов, категории)')
-print(put(f'http://localhost:8080/api/jobs/{resp["id"]}',
-          json={'team_leader': 1233,
-                'job': 'Edited test job',
-                'work_size': 30,
-                'collaborators': '122, 99',
-                'is_finished': True,
-                'category': 123}).json())
+pprint('Ошибочный запрос на изменение юзера с неполным набором json-параметра')
+pprint(put(f'http://localhost:8080/api/users/{resp["id"]}',
+           json={'name': 'testname',
+                 'position': 'middle_test',
+                 'email': 'test99@mars.org',}).json())
 print()
-print('Ошибочный запрос с неправильными типами данных (job в int, work_size в str, is_finished в str)')
-print(put(f'http://localhost:8080/api/jobs/{resp["id"]}',
-          json={'team_leader': 3,
-                'job': 12423,
-                'work_size': '30',
-                'collaborators': '2, 4',
-                'is_finished': 'True',
-                'category': 3}).json())
+print('Корректное изменение добавленного юзера')
+pprint(put(f'http://localhost:8080/api/users/{resp["id"]}',
+           json={'surname': 'editedsurname',
+                  'name': 'editedname',
+                  'position': 'middle_testedit',
+                  'speciality': 'test-engineer-edit',
+                  'age': 123,
+                  'address': 'module_test',
+                  'email': 'test99@mars.org',
+                  'password': 'testpass99'}).json())
 print()
-print('Корректно изменим добавленную работу')
-print(put(f'http://localhost:8080/api/jobs/{resp["id"]}',
-          json={'team_leader': 3,
-                'job': 'Edited test job',
-                'work_size': 30,
-                'collaborators': '2, 4',
-                'is_finished': True,
-                'category': 3}).json())
+print('Получение данных о измененом юзере')
+pprint(get(f'http://localhost:8080/api/users/{resp["id"]}').json())
 print()
-print('Проверим')
-pprint(get('http://localhost:8080/api/jobs').json())
+print('Корректное удаление юзера')
+pprint(delete(f'http://localhost:8080/api/users/{resp["id"]}').json())
 print()
-print('Корректно удалим добавленную работу')
-pprint(delete(f'http://localhost:8080/api/jobs/{resp["id"]}').json())
-print()
-print('Проверим')
-pprint(get('http://localhost:8080/api/jobs').json())
+print('Проверка')
+pprint(get('http://localhost:8080/api/users').json())

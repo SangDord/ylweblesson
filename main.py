@@ -8,6 +8,7 @@ from forms.__all_forms import *
 import os
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data import jobs_api
+from data import users_api
 
 
 app = Flask(__name__)
@@ -37,12 +38,12 @@ def register():
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Registration',
                                    form=form,
-                                   message="Пароли не совпадают")
+                                   message="Passwords don't match")
         session = db_session.create_session()
         if session.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Registration',
                                    form=form,
-                                   message="Такой пользователь уже есть")
+                                   message="Such user already exists")
         user = User(
             surname=form.surname.data,
             name=form.name.data,
@@ -283,4 +284,5 @@ def bad_request(_):
 if __name__ == "__main__":
     db_session.global_init('db/mars_mission.sqlite')
     app.register_blueprint(jobs_api.blueprint)
+    app.register_blueprint(users_api.blueprint)
     app.run(port=8080, host='127.0.0.1')
