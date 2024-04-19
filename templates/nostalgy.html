@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="container align-middle">
+        <h1> Nostalgy </h1>
+        <h1> {{ user.name }} {{ user.surname}} </h1>
+        <h2> Hometown {{ user.city_from }} </h2>
+        <img src="/static/img/city_img.jpg" title="city image">
+    </div>
+{% endblock content %}

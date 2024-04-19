@@ -7,7 +7,7 @@ from data.departement import Department
 import datetime
 
 
-def get_member(surname='', name='', age='', position='', speciality='', address='', email='', password=''):
+def get_member(surname='', name='', age='', position='', speciality='', address='', email='', password='', city_from=''):
     member = User()
     member.surname = surname
     member.name = name
@@ -15,6 +15,7 @@ def get_member(surname='', name='', age='', position='', speciality='', address=
     member.position = position
     member.speciality = speciality
     member.address = address
+    member.city_from = city_from
     member.email = email
     member.set_password(password)
     return member

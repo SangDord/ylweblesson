@@ -7,6 +7,7 @@
             "position": "captain",
             "speciality": "research engineer",
             "address": "module_1",
+            "city_from": "Oslo",
             "email": "scott_chief@mars.org",
             "password": "capmasterpassword"
         },
@@ -17,6 +18,7 @@
             "position": "middle",
             "speciality": "terraforming engineer",
             "address": "module_3",
+            "city_from": "Wellington",
             "email": "wair_andy@mars.org",
             "password": "mem1wairpass"
         },
@@ -27,6 +29,7 @@
             "position": "middle",
             "speciality": "cyber-engineer",
             "address": "module_3",
+            "city_from": "Los Angeles",
             "email": "cyber_teddy@mars.org",
             "password": "mem2sanderspass"
         },
@@ -37,6 +40,7 @@
             "position": "middle",
             "speciality": "pilot",
             "address": "module_2",
+            "city_from": "Barcelona",
             "email": "adam_scitle@mars.org",
             "password": "mem3scitlepass"
         },
@@ -47,6 +51,7 @@
             "position": "middle",
             "speciality": "meteorologist",
             "address": "module_4",
+            "city_from": "Helsinki",
             "email": "petrovich_ho@mars.org",
             "password": "mem4hoskopass"
         },
@@ -57,6 +62,7 @@
             "position": "middle",
             "speciality": "medic",
             "address": "module_3",
+            "city_from": "Moscow",
             "email": "watnyqq@mars.org",
             "password": "mem5watnypass"
         }

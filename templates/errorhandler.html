@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="alert alert-danger" role="alert">
+        <h2> Status code: {{ status_code }} </h2>
+        <h3> Reason: {{ reason }} </h3>
+    </div>
+{% endblock content %}

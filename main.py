@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, abort, make_response, jsonify
+from flask import Flask, render_template, redirect, abort, make_response, jsonify, url_for, request
 from data import db_session
 from data.users import User
 from data.jobs import Jobs
@@ -6,6 +6,7 @@ from data.categories import Category, Association
 from data.departement import Department
 from forms.__all_forms import *
 import os
+import requests
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data import jobs_api
 from data import users_api
@@ -51,6 +52,7 @@ def register():
             speciality=form.speciality.data,
             position=form.position.data,
             address=form.address.data,
+            city_from=form.city_from.data,
             age=form.age.data
         )
         user.set_password(form.password.data)
@@ -269,6 +271,23 @@ def deletedepartment(id):
     else:
         abort(404)
     return redirect('/departments')
+
+
+@app.route('/users_show/<int:user_id>')
+def nostalgy(user_id):
+    db_sess = db_session.create_session()
+    user: User = db_sess.query(User).get(user_id)
+    if not user:
+        return render_template('errorhandler.html', status_code=404, reason='User does not exist')
+    url = f"http://{request.host}{url_for('users_api.get_city_img', user_id=user_id)}"
+    image_response = requests.get(url)
+    
+    if image_response.status_code != 200:
+        abort(image_response.status_code)
+    city_img = eval(image_response.json()['img'])
+    with open('static/img/city_img.jpg', 'wb') as image:
+        image.write(city_img)
+    return render_template('nostalgy.html', user=user)
 
    
 @app.errorhandler(404)
