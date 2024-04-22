@@ -17,15 +17,6 @@ def abort_if_user_not_found(user_id):
         abort(404, message=f"User {user_id} not found")
         
 
-def type_check(*args):
-    try:
-        for var, cls in args:
-            cls(var)
-        return True
-    except ValueError:
-        return False
-    
-
 def email_check(email):
     email_pattern = rf"^[a-zA-Z0-9_.+-]+@[a-z-]+\.(?:{'|'.join(REGS_MAIL_DOMAINS)})+$"
     return fullmatch(email_pattern, email)
@@ -44,12 +35,8 @@ class UsersListResource(Resource):
         session = db_session.create_session()
         if session.query(User).filter(User.email == args['email']).first():
             abort(409, message=f"Email is already busy")
-        if not type_check((args['surname'], str), (args['name'], str), (args['age'], int),
-                          (args['position'], str), (args['speciality'], str), (args['address'], str),
-                          (args['city_from'], str), (args['email'], str)):
-            return abort(400, message='Bad request. Value error')
         if not email_check(args['email']):
-            return abort(400, message=f'Bad request. Email incorrect. Use only: {", ".join(REGS_MAIL_DOMAINS)} domains')
+            abort(400, message=f'Bad request. Email incorrect. Use only: {", ".join(REGS_MAIL_DOMAINS)} domains')
         user = User(
             surname=args['surname'],
             name=args['name'],
@@ -85,9 +72,9 @@ class UsersResource(Resource):
         if not type_check((args['surname'], str), (args['name'], str), (args['age'], int),
                           (args['position'], str), (args['speciality'], str), (args['address'], str),
                           (args['city_from'], str), (args['email'], str)):
-            return abort(400, message='Bad request. Value error')
+            abort(400, message='Bad request. Value error')
         if not email_check(args['email']):
-            return abort(400, message=f'Bad request. Email incorrect. Use only {", ".join(REGS_MAIL_DOMAINS)} domains')
+            abort(400, message=f'Bad request. Email incorrect. Use only {", ".join(REGS_MAIL_DOMAINS)} domains')
         user.surname = args['surname']
         user.name = args['name']
         user.age = args['age']

@@ -16,4 +16,4 @@ class Association(SqlAlchemyBase):
     __tablename__ = 'job_to_category'
     
     job = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('jobs.id'), primary_key=True)
-    category = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('category.id'), primary_key=True)
+    category = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('category.id'))

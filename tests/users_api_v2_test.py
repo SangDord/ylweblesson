@@ -1,4 +1,3 @@
-from typing import List
 from requests import get, post, delete, put
 from pprint import pprint
 
