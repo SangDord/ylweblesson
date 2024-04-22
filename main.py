@@ -1,13 +1,17 @@
 from flask import Flask, render_template, redirect, abort, make_response, jsonify, url_for, request
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_restful import Api
+
 from data import db_session
 from data.users import User
 from data.jobs import Jobs
 from data.categories import Category, Association
 from data.departement import Department
+from data import users_resource
 from forms.__all_forms import *
 import os
 import requests
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+
 from data import jobs_api
 from data import users_api
 
@@ -17,6 +21,10 @@ app.config['SECRET_KEY'] = 'ylweblesson_secret_key'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+api = Api(app)
+api.add_resource(users_resource.UsersListResource, '/api/v2/users')
+api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:user_id>')
 
 
 @login_manager.user_loader
@@ -30,7 +38,6 @@ def index():
     db_sess = db_session.create_session()
     jobs = db_sess.query(Jobs).all()
     return render_template('index.html', jobs=jobs)
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -126,9 +133,9 @@ def addjob():
 @login_required
 def editjob(id):
     form = AddjobForm()
+    db_sess = db_session.create_session()
+    job: Jobs = db_sess.query(Jobs).filter(Jobs.id == int(id)).first()
     if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        job: Jobs = db_sess.query(Jobs).filter(Jobs.id == int(id)).first()
         if not (job.team_leader == current_user.id or current_user.id == 1):
             return render_template('addjob.html', title='Editing a job', form=form, message='Access denied')
         
